@@ -1,24 +1,33 @@
 package UDP;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
-public class Server1 {
-    public static void main(String[] args) {
-        try {
-            ServerSocket ss = new ServerSocket(1234);
-            Socket con = ss.accept();
-            BufferedReader in= new BufferedReader(new InputStreamReader
-            (con.getInputStream()));
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter
-            (con.getOutputStream()));
-            String rdata = in.readLine();
-            System.out.println(rdata);
-            out.write(rdata.toUpperCase()+"\n");
-            out.flush();
-            con.close();
-            ss.close();
-            }
-            catch (Exception e) {}
-    }
+public class UDP_Server_1 {
+     public static void main(String [] s)
+    {
+        
+    try{
+      DatagramSocket sv = new DatagramSocket(1234);  
+      
+      
+      byte buff1[] = new byte[256];
+      DatagramPacket q = new DatagramPacket(buff1, buff1.length);
+      sv.receive(q);
+      
+      String data = new String(q.getData()).trim();
+      String kq = data.toUpperCase();
+
+      byte buff2[] = kq.getBytes();
+      InetAddress addcl = q.getAddress();
+      int portcl = q.getPort();
+      DatagramPacket k = new DatagramPacket(buff2,buff2.length,addcl,portcl);
+      sv.send(k);
+      
+      
+      sv.close();
+    } catch(IOException e) {}
+    }   
 }
